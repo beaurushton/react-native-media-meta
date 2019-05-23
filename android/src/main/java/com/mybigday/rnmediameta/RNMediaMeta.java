@@ -118,6 +118,8 @@ public class RNMediaMeta extends ReactContextBaseJavaModule {
       // Legacy support & camelCase
       result.putString("createTime", result.getString("creation_time"));
 
+      // TODO: getScaledFrameAtTime may be a better option here
+      // see: https://developer.android.com/reference/android/media/MediaMetadataRetriever.html#getScaledFrameAtTime(long,%20int,%20int,%20int)
       if (options.getBoolean("getThumb")) {
         // get thumb
         Bitmap bmp = mmr.getFrameAtTime();
@@ -183,6 +185,11 @@ public class RNMediaMeta extends ReactContextBaseJavaModule {
             bytes = convertToBytes(bmp);
           }
 
+          result.putString("thumb", convertToBase64(bytes));
+        } else {
+          // return a grey thumbnail
+          Bitmap blankBmp = Bitmap.createBitmap(2, 2, Bitmap.Config.ARGB_8888);
+          byte[] bytes = convertToBytes(blankBmp);
           result.putString("thumb", convertToBase64(bytes));
         }
       }
