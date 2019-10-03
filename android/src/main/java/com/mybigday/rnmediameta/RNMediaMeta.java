@@ -111,8 +111,10 @@ public class RNMediaMeta extends ReactContextBaseJavaModule {
         putString(result, meta, mmr.extractMetadata(meta));
       }
 
+      String rotation = "";
       if (result.hasKey("framerate") && !result.hasKey("rotation")) {
-        putString(result, "rotation", mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION));
+        rotation =  mmr.extractMetadata(FFmpegMediaMetadataRetriever.METADATA_KEY_VIDEO_ROTATION);
+        putString(result, "rotation", rotation);
       }
 
       // Legacy support & camelCase
@@ -166,8 +168,8 @@ public class RNMediaMeta extends ReactContextBaseJavaModule {
           * get the rotation from the metadata and apply the correction so the image is straight.
           */
 
-          if (result.hasKey("rotation")) {
-            Bitmap rotatedBmp = RotateBitmap(bmp, Float.parseFloat(result.getString("rotation")));
+          if (!"".equals(rotation)) {
+            Bitmap rotatedBmp = RotateBitmap(bmp, Float.parseFloat(rotation));
             if (rotatedBmp != null) {
               bmp = rotatedBmp;
             }
